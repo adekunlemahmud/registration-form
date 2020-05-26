@@ -1,3 +1,118 @@
+
+<?php
+    // Include config file
+$localhost = "localhost";
+$dbusername = "root";
+$dbpassword = "";
+$dbname = "alaflaz";
+
+$link = mysqli_connect($localhost,$dbusername,$dbpassword,$dbname);
+
+
+
+
+
+if (isset($_POST["submit"])){
+	// file name with random number so that similar file don't get replaced
+	
+	$fileName = $_FILES["inFile"]["name"];
+	$fileExt = explode('.', $fileName);
+	$fileActualExt = strtolower(end($fileExt));
+	$permanent_file_name = uniqid('', true).".".$fileActualExt;
+
+	// temporary file name to store file
+	$tempname = $_FILES["inFile"]["tmp_name"];
+
+	// upload directory path
+	$uploads_dir = 'uploads/'.$permanent_file_name;
+
+	// moving uploaded to specific location
+	move_uploaded_file($tempname, $uploads_dir);
+
+
+
+
+	// second file for birth certificate
+	$fileNameB = $_FILES["birth_certificate"]["name"];
+	$fileExtB = explode('.', $fileNameB);
+	$fileActualExtB = strtolower(end($fileExtB));
+	$permanent_file_nameB = uniqid('', true).".".$fileActualExtB;
+
+	$tempnameB = $_FILES["birth_certificate"]["tmp_name"];
+	$uploads_dirB = 'birth_cert/'.$permanent_file_nameB;
+	move_uploaded_file($tempnameB, $uploads_dirB);
+
+	
+	// third file
+	$fileNameL = $_FILES["last_result"]["name"];
+	$fileExtL = explode('.', $fileNameL);
+	$fileActualExtL = strtolower(end($fileExtL));
+	$permanent_file_nameL = uniqid('', true).".".$fileActualExtL;
+
+	$tempnameL = $_FILES["last_result"]["tmp_name"];
+	$uploads_dirL = 'last_result/'.$permanent_file_nameL;
+	move_uploaded_file($tempnameL, $uploads_dirL);
+	
+
+
+	// Attempt to empty all variables for security 
+$surname = mysqli_real_escape_string($link, $_REQUEST['surname']);
+$firstname = mysqli_real_escape_string($link, $_REQUEST['firstname']);
+$othername = mysqli_real_escape_string($link, $_REQUEST['othername']);
+$dob = mysqli_real_escape_string($link, $_REQUEST['dob']);
+// $age = mysqli_real_escape_string($link, $_REQUEST['age']);
+$gender = mysqli_real_escape_string($link, $_REQUEST['gender']);
+$country = mysqli_real_escape_string($link, $_REQUEST['country']);
+$state_of_origin = mysqli_real_escape_string($link, $_REQUEST['ostate']);
+$lga = mysqli_real_escape_string($link, $_REQUEST['lga']);
+$language = mysqli_real_escape_string($link, $_REQUEST['language']);
+$admitted_class = mysqli_real_escape_string($link, $_REQUEST['class']);
+$address = mysqli_real_escape_string($link, $_REQUEST['address']);
+$last_school = mysqli_real_escape_string($link, $_REQUEST['last-school']);
+$last_class = mysqli_real_escape_string($link, $_REQUEST['last-class']);
+$date_of_leaving = mysqli_real_escape_string($link, $_REQUEST['date_of_leaving']);
+$reason_for_leaving = mysqli_real_escape_string($link, $_REQUEST['reason_for_leaving']);
+$Fsurname = mysqli_real_escape_string($link, $_REQUEST['Fsurname']);
+$Fothernames = mysqli_real_escape_string($link, $_REQUEST['Fothernames']);
+$Femail = mysqli_real_escape_string($link, $_REQUEST['Femail']);
+$Fphone_no = mysqli_real_escape_string($link, $_REQUEST['Fphone-no']);
+$Faddress = mysqli_real_escape_string($link, $_REQUEST['Faddress']);
+$Foccupation = mysqli_real_escape_string($link, $_REQUEST['Foccupation']);
+$Femployer = mysqli_real_escape_string($link, $_REQUEST['Femployer']);
+$Fbusinessaddress = mysqli_real_escape_string($link, $_REQUEST['Fbusinessaddress']);
+$Msurname = mysqli_real_escape_string($link, $_REQUEST['Msurname']);
+$Mothernames = mysqli_real_escape_string($link, $_REQUEST['Mothernames']);
+$Memail = mysqli_real_escape_string($link, $_REQUEST['Memail']);
+$Mphone_no = mysqli_real_escape_string($link, $_REQUEST['Mphone-no']);
+$Maddress = mysqli_real_escape_string($link, $_REQUEST['Maddress']);
+$Moccupation = mysqli_real_escape_string($link, $_REQUEST['Moccupation']);
+$Memployer = mysqli_real_escape_string($link, $_REQUEST['Memployer']);
+$Mbusinessaddress = mysqli_real_escape_string($link, $_REQUEST['Mbusinessaddress']);
+$health_issues = mysqli_real_escape_string($link, $_REQUEST['health_issues']);
+$health_issues_description = mysqli_real_escape_string($link, $_REQUEST['health_issues_description']);
+$allergies = mysqli_real_escape_string($link, $_REQUEST['allergies']);
+$allergies_description = mysqli_real_escape_string($link, $_REQUEST['allergies-description']);
+$immunization = mysqli_real_escape_string($link, $_REQUEST['immunization']);
+$peculiar_illness = mysqli_real_escape_string($link, $_REQUEST['peculiar-illness']);
+$medications = mysqli_real_escape_string($link, $_REQUEST['medications']);
+
+// Attempt insert query execution
+$sql = "INSERT INTO registration ( `surname`, `firstname`, `othername`, `passport`, `dob`, `gender`, `country`, `state`, `lga`, `language_spoken`, `admitted_class`, `contact_address`, `last_school`, `last_class`, `date_of_leaving`, `reasons_for_leaving`, F_surname, F_othernames, F_email, F_phone_number, F_home_address, F_occupation, F_employer, F_business_address, `M_surname`, `M_othernames`, `M_email`, `M_phone_number`, `M_home_address`, `M_occupation`, `M_employer`, `M_business_address`, `health_problems?`, `descriptions`, `allergies?`, `allergies_reaction`, `government_immunization?`, `peculiar_illness?`, `special_reactions?`, `birth_certificate`, `last_result`, `created_on`) VALUES ('$surname', '$firstname', '$othername', '$permanent_file_name', '$dob', '$gender', '$country', '$state_of_origin', '$lga', '$language', '$admitted_class', '$address', '$last_school', '$last_class', '$date_of_leaving', '$reason_for_leaving', '$Fsurname', '$Fothernames', '$Femail', '$Fphone_no', '$Faddress', '$Foccupation', '$Femployer', '$Fbusinessaddress', '$Msurname', '$Mothernames', '$Memail', '$Mphone_no', '$Maddress', '$Moccupation', '$Memployer', '$Mbusinessaddress', '$health_issues', '$health_issues_description', '$allergies', '$allergies_description', '$immunization', '$peculiar_illness', '$medications', '$permanent_file_nameB', '$permanent_file_nameL', NOW())";
+if(mysqli_query($link, $sql)){
+    echo "Records added successfully.";
+} else{
+    echo "ERROR: Could not able to execute $link->error ";
+    // print($link->error);
+}
+ 
+// Close connection
+// mysqli_close($link);
+}
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -167,13 +282,20 @@
 				opacity: 0.8 !important;
 			}
 
+			.btn-error{
+				background-color: red;
+				color: white;
+			}
+
 			.fas{
 				font-size: xx-large;
     			color: #10b541 !important;
 
 			}
 
-			
+			.form-text{
+				text-transform: capitalize;
+			}
 
 
 			   /****************************/
@@ -251,6 +373,11 @@
         margin-top: 10px;
         font-size: 
       }
+
+      .p{
+      	text-align: center;
+      	margin-top: 15px;
+      }
 			/*-----------Other styles--------*/
 			.index-sec{
         margin-top: 5.4em;
@@ -321,9 +448,11 @@
 .loader-img{
 	height: 100px;
 	display: block;
-	position: absolute;
-	
+	position: absolute;	
+}
 
+.close-error{
+	color: red;
 }
 
 .loader {
@@ -403,10 +532,21 @@
 	display: flex;
 	
 }
-#others{
+#others,#pg2,#pg3,#health_issues,#allergies,#lga1,#state1{
 	display: none;
 }
+.left{
+	position: relative;
+	float: left;
+}
 
+#customControlAutosizing {
+	background-color: #10b541; 
+}
+
+#input {
+	border-color: red;
+}
 /*media queries*/
 
 @media only screen and (min-width: 500px){
@@ -430,7 +570,7 @@
 		</div>
 		<!-- preloader ends -->
 		<header>
-			<nav class="navbar fixed-top navbar-expand-lg navbar-main bg-white">
+			<nav class="navbar  navbar-expand-lg navbar-main bg-white">
 				<div class="container">
 					<a class="navbar-brand" href="index.html">
 						<img src="../images/logo1.svg" alt="logo" class="img img-responsive" height="100" width="100">
@@ -484,7 +624,7 @@
   <img id="img-logo" src="https://res.cloudinary.com/dwszstiol/image/upload/v1587652605/al-aflaz/logo1_mt1hbx.svg" class="card-img-top" height="100" width="100" alt="...">
   <div class="card-body">
     <h5 class="card-title text-center">REGISTRATION FORM</h5>
-   <form method="post" action="form.html">
+   <form method="post" enctype="multipart/form-data" action="form.php" novalidate="" id="form">
    	<div class="center-div">
 
    		<!-- passport process starts-->
@@ -496,7 +636,7 @@
 
    	</div>
    	<div class="center-div">
-   		<input onchange="ValidateSize(this)" class="info" type="file" name="inFile" id="inFile" hidden="hidden" accept="image/*">
+   		<input onchange="validateSize(this)" class="info" type="file" name="inFile" id="inFile" hidden="hidden" accept="image/*">
   		<button  type="button" id="custom-button" class="btn btn-card">Upload Passport</button>
   		<!-- <span class="info"  id="custom-text">No Passport Upload, yet</span> -->
   		</div>
@@ -507,7 +647,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Passport Too Large</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -515,7 +655,7 @@
         <p>Passport size should not exceed 50KB</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-card" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
         
       </div>
     </div>
@@ -524,39 +664,334 @@
 <!-- passport modal ends -->
    		<!-- passport process ends-->
 
-<!-- form contents starts-->
-<div>
+<div><!-- form contents starts-->
+	<!-- validation modal -->
+<div id="modalValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Your input is required</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Kindly provide this info as it is required</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="fatherValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Father's Details Incorrect</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Kindly provide the father's detail(s) before submission</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="motherValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Mother's Details Incorrect</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Kindly provide the mother's detail(s) before submission</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modalNameValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Incorrect pupil's name</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Kindly provide correct names as your input is invalid</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modalDobValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">DOB or gender not entered</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Kindly provide your DOB or gender as the input is empty</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="modalCountryValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Nationality or State of origin or LGA not entered</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Kindly provide the details as required before submission</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="modalClassValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Admitted Class not entered</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Kindly provide a valid class before submission</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="healthValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Health Details Incomplete</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Kindly provide complete health details before submission</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="certificateValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Birth Certificate not Uploaded</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Kindly upload birth certificate before submission</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="confirmValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Kindly click to confirm before submission</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modalAddressValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Address not Entered</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Kindly provide pupil's contact address before submission</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="inputValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Input incorrect</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Your input is incorrect, provide a valid input</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- validation modal ends -->
+<div id="passportValidate" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Your Passport is required</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Upload your passport to submit this form</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+<div id="pg1"> <!-- page 1 starts -->
+
+
+	
+<!-- validation Dob -->
+<div id="modalDob" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Pupil too young</h5>
+        <button type="button" class="close close-error" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Pupil's age can not be less than one year old</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-error" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- validationDob ends -->
 <div>
 	<h4 class="info1">PUPIL'S DETAILS</h4>
-</div>
+	</div>
    	<div class="form-group">
     <label class="info" >Surname</label>
-    <input name="name" type="text" required="" class="form-control form-text"  placeholder=" Surname">
+    <input name="surname" type="text" onblur="validateEmpty(this)" id="surname" class="form-control form-text"  placeholder=" Surname">
   </div>
+ 
   <div class="form-group">
     <label class="info" >First Name</label>
-    <input name="name" type="text" required="" class="form-control form-text"  placeholder="First Name">
-  </div>
+    <input name="firstname" type="text" id="firstname" class="form-control form-text"  placeholder="First Name" onblur="validateEmpty(this)">
+</div>
+  
   <div class="form-group">
-    <label class="info" >Other Names</label>
-    <input name="name" type="text" required="" class="form-control form-text" id="" placeholder=" Other Names">
+    <label class="info" >Other Name</label>
+    <input name="othername" type="text" required="" class="form-control form-text" id="othername" placeholder=" Other Names">
   </div>
   <div class="row">
   	 <div class="col-sm-6">
     <label class="info" >Date of Birth</label>
     <div class="input-group">
-  <input type="date" onchange="getAge()" class="form-control dob" id="dob" placeholder="Pick Date of Birth" >
+  <input type="date" name="dob" onchange="getAge()" class="form-control dob" id="dob" placeholder="Pick Date of Birth" onblur="validateEmpty(this)"  >
   <div class="input-group-append">
-    <label id="age" class="input-group-text">0</label>
+    <span readonly="" id="age" name='age' class="input-group-text" >0</span>
   </div>
   </div>
   </div>
    <div class="col-sm-6">
     <label class="info" >Gender</label>
-    <select class="custom-select" id="inputGroupSelect02">
+    <select name="gender" class="custom-select" id="inputGroupSelect02" onblur="validateEmpty(this)" >
     <option selected>Choose...</option>
-    <option value="1">Male</option>
-    <option value="2">Female</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
   </select>
  
   </div>
@@ -566,18 +1001,18 @@
   	 <div class="col-sm-4">
     <label class="info" >Nationality</label>
     <div class="input-group">
- <select class="custom-select" id="country" name="country" onchange="loadCountry()">
+ <select class="custom-select" id="country" name="country" onchange="loadCountry()" onblur="validateEmpty(this)">
     <option selected>Select Country</option>
-    <option value="1">Nigeria</option>
-    <option value="2">Others, Please specify</option>
+    <option value="Nigeria">Nigeria</option>
+    <option value="Others">Others, Please specify</option>
     
   </select>
 
   </div>
   </div>
-   <div class="col-sm-4" id="state1">
+   <div class="col-sm-4" id="state1" >
     <label class="info" >State of Origin</label>
-                  <select class="custom-select" name="ostate" id="ostate">
+                  <select class="custom-select" name="ostate" id="ostate" onblur="validateEmpty(this)" >
                   <option selected="selected">Select State...</option>
                   <option value='Abia'>Abia</option>
                   <option value='Adamawa'>Adamawa</option>
@@ -623,74 +1058,322 @@
 
   <div class="col-sm-4" id="lga1">
     <label class="info" >LGA</label>
-    <select  class="custom-select" name="lga" id="lga">
+    <select  class="custom-select" name="lga" id="lga" onblur="validateEmpty(this)" >
                   <option selected="selected">Select LGA...</option>
                 </select>
  
   </div>
   <div class="col-sm-8"  id="others">
     <label class="info" >Others</label>
-  <input class="form-control " type="" name="">
+  <input class="form-control " type="" name="country" id="other" onchange="loadCountry()">
   	
   </div>
   </div>
-
-</div>
-
-
-<!-- card ends -->
-</div>
-  <button type="submit" name="submit" class="btn btn-card">Submit</button>
-   
+  <div class="row">
+  	 <div class="col-sm-8">
+    <label class="info" >Languages Spoken</label>
+    <input name="language" type="text" id="languge" required="" class="form-control form-text"  placeholder="Enter Languages Spoken">
   </div>
+  	 <div class="col-sm-4">
+  	 	<label class="info" >Class Admitted to</label>
+    <select name="class" class="custom-select" id="class" onblur="validateEmpty(this)" >
+    <option selected>Choose...</option>
+    <option value="Play Class">Play Class</option>
+    <option value="Preparatory Class">Preparatory Class</option>
+    <option value="Nursery 1">Nursery 1</option>
+    <option value="Nursery 2">Nursery 2</option>
+    <option value="Grade 1">Grade 1</option>
+    <option value="Grade 2">Grade 2</option>
+    <option value="Grade 3">Grade 3</option>
+    <option value="Grade 4">Grade 4</option>
+    <option value="Grade 5">Grade 5</option>
+
+  </select>
+
+  	 </div>
+</div>
+  <div class="form-group">
+    <label class="info" >Contact Address</label>
+    <textarea name="address" onblur="validateEmpty(this)"  class="form-control form-text" id="address" rows="5" placeholder="Enter Contact Address"></textarea>
+    
+  </div>
+
+
+<div>
+	<h5 class="info1">Details of Previous School Attended</h5>
+</div>
+   	<div class="form-group">
+    <label class="info" >Last School Attended</label>
+    <input name="last-school" type="text" id="last_school"  class="form-control form-text"  placeholder="Enter School Attended">
+  </div>
+  <div class="row">
+  	<div class="col-sm-6">
+  	<div class="form-group">
+    <label class="info" >Last Class Attended</label>
+    <input name="last-class" type="text" class="form-control form-text"  placeholder="Enter Last Class Attended">
+  </div>
+</div>
+  	 <div class="col-sm-6">
+    <label class="info" >Date of Leaving</label>
+    <div class="input-group">
+  <input type="date" name="date_of_leaving"  class="form-control" id="date_of_leaving" placeholder="Pick Date " >
+  
+  </div>
+  </div>
+  </div>
+	
+  
+  <div class="form-group">
+    <label class="info" >Reason(s) for Leaving</label>
+    <textarea name="reason_for_leaving" class="form-control form-text" id="reason_for_leaving" rows="5" placeholder=""></textarea>
+  </div>
+  <button type="button" name="button" onclick="hide_show('pg1','pg2')" id="next" class="btn btn-card">Next</button>
+  
+</div> <!-- page 1 ends -->
+
+
+<div id="pg2"> <!-- page 2 begins -->
+
+<div>
+	<h3 class="info1 p">Parent's/Guardian's Details</h3>
+	<div> <!-- father's info starts -->
+	<h5 class="info1">Father's Details</h5>
+  <div class="row">
+  	<div class="col-sm-6">
+  	<div class="form-group">
+    <label class="info" >Surname</label>
+    <input name="Fsurname" type="text" onblur="validateEmpty(this)"  id="father's_surname" class="form-control form-text"  placeholder="Enter Surname">
+  </div>  
+</div>
+  	 <div class="col-sm-6">
+    <label class="info" >Other Names</label>
+    <input name="Fothernames" type="text" onblur="validateEmpty(this)"  id="father's_othernames" class="form-control form-text"  placeholder="Enter Other Names">
+  </div>
+  </div>
+  <div class="row">
+  	<div class="col-sm-6">
+  	<div class="form-group">
+    <label class="info" >Email</label>
+    <input name="Femail" type="email"  id="father's_email" class="form-control"  placeholder="Enter Email" onblur="validateEmpty(this)">
+  </div>
+</div>
+  	 <div class="col-sm-6">
+    <label class="info" >Phone Number</label>
+    <input name="Fphone-no" type="tel"  id="father's_phone_no" class="form-control form-text" onblur="validateEmpty(this)"   placeholder="Enter Phone No">
+  </div>
+  </div>
+  <div class="form-group">
+    <label class="info" >Home Address</label>
+    <textarea name="Faddress" onblur="validateEmpty(this)"  class="form-control form-text" id="home-addr" rows="5" placeholder=""></textarea>
+  </div>
+  <div class="row">
+  	<div class="col-sm-6">
+  	<div class="form-group">
+    <label class="info" >Occupation</label>
+    <input name="Foccupation" type="text"  id="father's_occupation" class="form-control form-text"  placeholder="Enter Occupation" onblur="validateEmpty(this)">
+  </div>
+</div>
+  	 <div class="col-sm-6">
+    <label class="info" >Name of Employer</label>
+    <input name="Femployer" type="text"  id="father's_employer" class="form-control form-text"  placeholder="Enter Employer" onblur="validateEmpty(this)">
+  </div>
+  </div>
+  <div class="form-group">
+    <label class="info" >Business Address</label>
+    <textarea name="Fbusinessaddress"  class="form-control form-text" id="busi-addr" rows="5" placeholder="" onblur="validateEmpty(this)"></textarea>
+  </div>
+  </div> <!-- father's info ends -->
+
+  <div> <!-- mother's info starts -->
+	<h5 class="info1">Mother's Details</h5>
+  <div class="row">
+  	<div class="col-sm-6">
+  	<div class="form-group">
+    <label class="info" >Surname</label>
+    <input name="Msurname" type="text" onblur="validateEmpty(this)"  id="mother's_surname" class="form-control form-text"  placeholder="Enter Surname">
+  </div>
+</div>
+  	 <div class="col-sm-6">
+    <label class="info" >Other Names</label>
+    <input name="Mothernames" type="text" onblur="validateEmpty(this)"  id="mother's_othernames" class="form-control form-text"  placeholder="Enter Other Names">
+  </div>
+  </div>
+  <div class="row">
+  	<div class="col-sm-6">
+  	<div class="form-group">
+    <label class="info" >Email</label>
+    <input name="Memail" type="email"  id="mother's_email" class="form-control"  placeholder="Enter Email" onblur="validateEmpty(this)">
+  </div>
+</div>
+  	 <div class="col-sm-6">
+    <label class="info" >Phone Number</label>
+    <input name="Mphone-no" type="tel"  id="mother's_phone_no" class="form-control form-text" onblur="validateEmpty(this)"   placeholder="Enter Phone No">
+  </div>
+  </div>
+  <div class="form-group">
+    <label class="info" >Home Address</label>
+    <textarea name="Maddress"  class="form-control form-text" id="mother's_home-addr" rows="5" placeholder="" onblur="validateEmpty(this)"></textarea>
+  </div>
+  <div class="row">
+  	<div class="col-sm-6">
+  	<div class="form-group">
+    <label class="info" >Occupation</label>
+    <input name="Moccupation" type="text"  id="mother's_occupation" class="form-control form-text"  placeholder="Enter Occupation" onblur="validateEmpty(this)">
+  </div>
+</div>
+  	 <div class="col-sm-6">
+    <label class="info" >Name of Employer</label>
+    <input name="Memployer" type="text"  id="mother's_employer" class="form-control form-text"  placeholder="Enter Employer" onblur="validateEmpty(this)">
+  </div>
+  </div>
+  <div class="form-group">
+    <label class="info" >Business Address</label>
+    <textarea name="Mbusinessaddress"  class="form-control form-text" id="mother-busi-addr" rows="5" placeholder="" onblur="validateEmpty(this)"></textarea>
+  </div>
+  </div> <!-- mother's info ends -->
+</div>
+  <button type="button" name="button" onclick="hide_show('pg2','pg1')" id="Previous" class="btn btn-card left">Previous</button>
+  <button type="button" name="button" onclick="hide_show('pg2','pg3')" id="Previous" class="btn btn-card left">Next</button>
+  <!-- <button type="button" name="button" id="previous" class="btn btn-card">Next</button> -->
+  
+</div> <!-- pg2 ends -->
+
+<div id="pg3"><!--  pg3 begins -->
+
+
+
+<div>
+	<h4 class="info1">Pupil's Health History</h4>
+	<div>
+	<div class="form-check form-check-inline">
+    <label class="info col-form-label" >Does your child have any known health problems?</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" onclick="show1('health_issues')" name="health_issues" id="healthIssues" value="Yes">
+  <label class="info form-check-label"  for="inlineRadio1">Yes</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" onclick="hideAllergy('health_issues','health_issues_description')" name="health_issues" id="healthIssues" value="No">
+  <label class="info form-check-label"  for="inlineRadio2">No</label>
+</div>
+</div>
+<div id="health_issues">
+	<div class="form-group">
+    <label class="info" >Kindly provide brief description</label>
+    <textarea name="health_issues_description"  class="form-control form-text" id="health_issues_description" rows="5" placeholder="" ></textarea>
+  </div>
+	
+</div>
+<div>
+	<div class="form-check form-check-inline">
+    <label class="info col-form-label" >Does your child have any known allergies?</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" onclick="show1('allergies')" name="allergies" id="allergiesConfirm" value="Yes">
+  <label class="info form-check-label"  for="inlineRadio1">Yes</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" onclick="hideAllergy('allergies','allergies-description')" name="allergies" id="allergiesConfirm" value="No">
+  <label class="info form-check-label"  for="inlineRadio2">No</label>
+</div>
+</div> 
+<div id="allergies">
+	<div class="form-group">
+    <label class="info" >What are they and what are your child's reactions?</label>
+    <textarea name="allergies-description"  class="form-control form-text" id="allergies-description" rows="5" placeholder="" onblur="makeEmpty()"></textarea>
+  </div>
+	
+</div>
+<div>
+	<div class="form-check form-check-inline">
+    <label class="info col-form-label" >Should your child be administered the Government's Immunization?</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio"  name="immunization" id="immunizationConfirm" value="Yes, both oral and injection" onblur="validateEmpty(this)" >
+  <label class="info form-check-label"  for="inlineRadio1">Yes, both oral and injection</label> 
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio"  name="immunization" id="immunizationConfirm" value="Yes, only oral">
+  <label class="info form-check-label"  for="inlineRadio1">Yes, only oral</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio"  name="immunization" id="immunizationConfirm" value="No, not at all">
+  <label class="info form-check-label"  for="inlineRadio2">No, not at all</label>
+</div>
+</div>
+
+<div id="illness">
+	<div class="form-group">
+    <label class="info" >State any peculiar illness to your child if any:</label>
+    <textarea name="peculiar-illness"  class="form-control form-text" id="mother-busi-addr" rows="5" placeholder=""></textarea>
+  </div>
+	
+</div>
+<div >
+	<div class="form-group">
+    <label class="info" >Any special medications and/or restrictions?</label>
+    <label class="info" >If any please list the name of the medications and the medical condition for which it is taken</label>
+
+    <textarea name="medications"  class="form-control form-text" id="mother-busi-addr" rows="5" placeholder=""></textarea>
+  </div>
+	
+</div>
+<h4 class="info1">Consent to Medical Care and Treatment</h4>
+	<div>
+	<div class="form-check form-check-inline">
+    <label class="info col-form-label" >In the event that I can not be contacted immediately, medical or surgical treatment can be administered to my child in the case of an accident or emergency as prescribed by a qualified physician, and I hold <b>AL AFLAZ KIDDIES SCHOOL</b> and her employees harmless. </label>
+</div>
+
+  <div class="custom-control custom-checkbox mb-3">
+    <input type="checkbox" class="custom-control-input" id="customControlValidation1" required>
+    <label class="custom-control-label info" for="customControlValidation1">I agree</label>
+    
+  </div>
+  </div>
+</div>
+<h4 class="info1">Documents Upload</h4>
+	<div>
+	<div class="form-check form-check-inline">
+    <label class="info col-form-label" >Kindly upload the following documents. </label>
+</div><br>
+<div class="form-check form-check-inline">
+    <label class="info col-form-label" >Birth Certificate </label>
+</div>
+<div class="custom-file">
+  <input type="file" class="custom-file-input info" name="birth_certificate" id="birth_certificate" onblur="validateEmpty(this)">
+  <label class="custom-file-label info" for="customFile">Choose file</label>
+</div>
+<div class="form-check form-check-inline">
+    <label class="info col-form-label" >The last result from previous school attended </label>
+</div>
+<div class="custom-file">
+  <input type="file" class="custom-file-input info" name="last_result" id="last_result">
+  <label class="custom-file-label info" for="customFile">Choose file</label>
+</div>
+</div>
+	<div>
+  <button type="button" name="button" onclick="hide_show('pg3','pg2') " id="Previous" class="btn btn-card left">Previous</button>
+  <button type="submit" name="submit" class="btn btn-card">Submit</button>
+</div>
+</div>
+
+</div> <!-- pg3 ends -->
+</div> <!-- card ends -->
+
+
   </form>
 <!-- form contents ends-->
-
+</div>
+</div>
 
 			</section>
 
 						
 
-		  	<section class="bg-cardinal">
-		  		<div class="container mt-4 py-4">
-		  			<div class="row">
-		  				<div class="col-md-12">
-		  					<h3 class="text-white py-4 mb-4 text-center" data-aos="zoom-in">Our three cardinal <br> points</h3>
-		  				</div>
-		  			</div>
-		  			<div class="row">
-		  				<div class="col-md-4">
-		  					<div class="text-center text-white">
-		  						<img class="rounded" src="../images/nigerian.jpg" class="img img-responsive" height="auto" width="100%">
-		  						<p class="text-white text-bold mt-4">Nigerian</p>
-		  					</div>
-		  				</div>
-		  				<div class="col-md-4">
-		  					<div class="text-center text-white">
-		  						<img class="rounded" src="../images/british.jpg" class="img img-responsive" height="auto" width="100%">
-		  						<p class="text-white text-bold mt-4">British</p>
-		  					</div>
-		  				</div>
-		  				<div class="col-md-4">
-		  					<div class="text-center text-white">
-		  						<img class="rounded" src="../images/islamic.jpg" class="img img-responsive" height="auto" width="100%">
-		  						<p class="text-white text-bold mt-4">Islamic</p>
-		  					</div>
-		  				</div>
-		  			</div>
-		  			<div class="row">
-		  				<div class="col-md-12">
-		  					<p class="text-center">
-			  					<a href="academics.html" target="_blank" class="btn btn-secondary-outline btn-lg breath ">Learn More</a>
-			  				</p>
-		  				</div>
-		  			</div> 
-		  		</div>
-		  	</section>
-		</main>
+		  	
 
 		
-		<footer class="bg-white pt-4 " data-aos="fade-down">
+		<footer class="bg-white pt-4 " >
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-12 col-sm-6 col-md-2">
@@ -747,7 +1430,7 @@
 				    </p>
 				    <p>&copy; AL AFLAZ 2020.</p>
 				</div>
-			</div>1`11`
+			</div>
 		</footer>
 		<!-- Optional JavaScript -->
 	    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -829,7 +1512,7 @@
 
 		  	// const modal = previewContainer.querySelector('.modal');
 
-		function ValidateSize(file) {
+		function validateSize(file) {
         var FileSize = file.files[0].size / 512 / 512; // in KB
         if (FileSize > 0.2) {
 
@@ -842,12 +1525,308 @@
         }
     }
 
+function hideAllergy(hide,clear){
+const allergy = document.getElementById(hide);
+ var allergyDescribe = document.getElementById(clear);
+allergy.style.display = 'none';
+allergyDescribe.value = '';
+}
+
+
+
+    function validateEmpty(inputTxt){
+    	if(inputTxt.value == '' ){
+    		$('#modalValidate').modal('show');
+    		inputTxt.style.borderColor = 'red';
+    	} else{
+    		inputTxt.style.borderColor = '#e6e6e6';
+
+    	}
+    }
+		
+    const form = document.getElementById('form');
+    const passport = document.getElementById('inFile');
+    const surname = document.getElementById('surname');
+    const firstname = document.getElementById('firstname');
+    const dob = document.getElementById('dob');
+    const gender = document.getElementById('inputGroupSelect02');
+    const country = document.getElementById('country');
+    const lga = document.getElementById('lga');
+    const state = document.getElementById('ostate');
+    const otherCountry = document.getElementById('other');
+    const presentClass = document.getElementById('class');
+    const fSurname = document.getElementById('father\'s_surname');
+    const fOtherNames = document.getElementById('father\'s_othernames');
+    const fEmail = document.getElementById('father\'s_email');
+    const fPhoneNo = document.getElementById('father\'s_phone_no');
+    const fAddress = document.getElementById('home-addr');
+    const fOccupation = document.getElementById('father\'s_occupation');
+    const fEmployer = document.getElementById('father\'s_employer');
+    const fBusinessAddress = document.getElementById('busi-addr');
+    const mSurname = document.getElementById('mother\'s_surname');
+    const mOtherNames = document.getElementById('mother\'s_othernames');
+    const mEmail = document.getElementById('mother\'s_email');
+    const mPhoneNo = document.getElementById('mother\'s_phone_no');
+    const mAddress = document.getElementById('mother\'s_home-addr');
+    const mOccupation = document.getElementById('mother\'s_occupation');
+    const mEmployer = document.getElementById('mother\'s_employer');
+    const mBusinessAddress = document.getElementById('mother-busi-addr');
+    const healthIssues = document.getElementsByName('health_issues');
+    const allergiesConfirm = document.getElementsByName('allergies');
+    const immunizationConfirm  = document.getElementsByName('immunization');
+    const confirm = document.getElementById('customControlValidation1');
+    const birth_certificate = document.getElementById('birth_certificate');
+      
+   
+    form.addEventListener('submit', (e) =>{
+    	if (passport.value === '' ){
+    		$('#passportValidate').modal('show');
+    		e.preventDefault();
+    		previewImg.style.borderColor =  'red';
+
+    	}else{
+    		previewImg.style.borderColor =  '#10b541';
+
+    	}
+
+    	var word = /^[a-zA-Z]+$/
+    	if (surname.value ==='' || !word.test(surname.value) || surname.value ===null || firstname.value ===null || firstname.value ==='' || !word.test(firstname.value)){
+    		$('#modalNameValidate').modal('show');
+    		e.preventDefault();
+    	surname.style.borderColor = firstname.style.borderColor = 'red';
+    	} else{
+    		surname.style.borderColor = firstname.style.borderColor = '#e6e6e6';
+
+    	}
+    	if(dob.value === '' || dob.value === null || gender.value === 'Choose...'){
+    		$('#modalDobValidate').modal('show');
+    		e.preventDefault();
+    		dob.style.borderColor = gender.style.borderColor = 'red';
+    	} else{
+    		gender.style.borderColor = dob.style.borderColor = '#e6e6e6';
+
+    	}
+
+    	if(country.value === 'Select Country'  || state.value === 'Select State...'  || lga.value === 'Select item...' ){
+    		$('#modalCountryValidate').modal('show');
+    		e.preventDefault();
+
+    		country.style.borderColor = state.style.borderColor = lga.style.borderColor = 'red';
+    	} else{
+    		country.style.borderColor = state.style.borderColor = lga.style.borderColor = '#e6e6e6';
+
+    	}
+
+
+    	// if (country.value !='Select Country' && otherCountry.value === ''){
+    	// 	$('#modalCountryValidate').modal('show');
+    	// 	e.preventDefault();
+    	// }
+
+    	if(presentClass.value === 'Choose...'){
+    		$('#modalClassValidate').modal('show');
+    		e.preventDefault();
+    		presentClass.style.borderColor = 'red';
+    	} else{
+    		presentClass.style.borderColor = '#e6e6e6';
+    	}
+
+    	if(address.value === '' || address.value === null){
+    		$('#modalAddressValidate').modal('show');
+    		e.preventDefault();
+    		address.style.borderColor = 'red';
+    	} else{
+    		address.style.borderColor = '#e6e6e6';
+    	}
+
+		if(fSurname.value === ''|| fSurname.value ===null){
+    		$('#fatherValidate').modal('show');
+    		e.preventDefault();
+    		fSurname.style.borderColor = 'red';
+    	} else{
+    		fSurname.style.borderColor = '#e6e6e6';
+    	}
+    	if(fOtherNames.value === '' || fOtherNames.value === null){
+    		$('#fatherValidate').modal('show');
+    		e.preventDefault();
+    		fOtherNames.style.borderColor = 'red'; 
+    		
+    	}else{
+    		fOtherNames.style.borderColor = '#e6e6e6';
+    	}
+    	
+    	if(fEmail.value === '' || fEmail.value === null){
+    		$('#fatherValidate').modal('show');
+    		e.preventDefault();
+    		fEmail.style.borderColor = 'red'; 
+    		
+    	}else{
+    		fEmail.style.borderColor = '#e6e6e6';
+    	}
+
+    	if(fPhoneNo.value === '' || fPhoneNo.value === null){
+    		$('#fatherValidate').modal('show');
+    		e.preventDefault();
+    		fPhoneNo.style.borderColor = 'red'; 
+    		
+    	}else{
+    		fPhoneNo.style.borderColor = '#e6e6e6';
+    	}
+
+    	if(fAddress.value === '' || fAddress.value === null){
+    		$('#fatherValidate').modal('show');
+    		e.preventDefault();
+    		fAddress.style.borderColor = 'red'; 
+    		
+    	}else{
+    		fAddress.style.borderColor = '#e6e6e6';
+    	}
+
+    	if(fOccupation.value === '' || fOccupation.value === null){
+    		$('#fatherValidate').modal('show');
+    		e.preventDefault();
+    		fOccupation.style.borderColor = 'red'; 
+    		
+    	}else{
+    		fOccupation.style.borderColor = '#e6e6e6';
+    	}
+
+    	if(fBusinessAddress.value === '' || fBusinessAddress.value === null){
+    		$('#fatherValidate').modal('show');
+    		e.preventDefault();
+    		fBusinessAddress.style.borderColor = 'red'; 
+    		
+    	}else{
+    		fBusinessAddress.style.borderColor = '#e6e6e6';
+    	}
+
+    	if(fEmployer.value === '' || fEmployer.value === null){
+    		$('#fatherValidate').modal('show');
+    		e.preventDefault();
+    		fEmployer.style.borderColor = 'red'; 
+    		
+    	}else{
+    		fEmployer.style.borderColor = '#e6e6e6';
+    	}
+
+
+    	if(mSurname.value === ''|| mSurname.value ===null){
+    		$('#motherValidate').modal('show');
+    		e.preventDefault();
+    		mSurname.style.borderColor = 'red';
+    	} else{
+    		mSurname.style.borderColor = '#e6e6e6';
+    	}
+    	if(mOtherNames.value === '' || mOtherNames.value === null){
+    		$('#motherValidate').modal('show');
+    		e.preventDefault();
+    		mOtherNames.style.borderColor = 'red'; 
+    		
+    	}else{
+    		mOtherNames.style.borderColor = '#e6e6e6';
+    	}
+    	
+    	if(mEmail.value === '' || mEmail.value === null){
+    		$('#motherValidate').modal('show');
+    		e.preventDefault();
+    		mEmail.style.borderColor = 'red'; 
+    		
+    	}else{
+    		mEmail.style.borderColor = '#e6e6e6';
+    	}
+
+    	if(mPhoneNo.value === '' || mPhoneNo.value === null){
+    		$('#motherValidate').modal('show');
+    		e.preventDefault();
+    		mPhoneNo.style.borderColor = 'red'; 
+    		
+    	}else{
+    		mPhoneNo.style.borderColor = '#e6e6e6';
+    	}
+
+    	if(mAddress.value === '' || mAddress.value === null){
+    		$('#motherValidate').modal('show');
+    		e.preventDefault();
+    		mAddress.style.borderColor = 'red'; 
+    		
+    	}else{
+    		mAddress.style.borderColor = '#e6e6e6';
+    	}
+
+    	if(mOccupation.value === '' || mOccupation.value === null){
+    		$('#motherValidate').modal('show');
+    		e.preventDefault();
+    		mOccupation.style.borderColor = 'red'; 
+    		
+    	}else{
+    		mOccupation.style.borderColor = '#e6e6e6';
+    	}
+
+    	if(mBusinessAddress.value === '' || mBusinessAddress.value === null){
+    		$('#motherValidate').modal('show');
+    		e.preventDefault();
+    		mBusinessAddress.style.borderColor = 'red'; 
+    		
+    	}else{
+    		mBusinessAddress.style.borderColor = '#e6e6e6';
+    	}
+
+    	if(mEmployer.value === '' || mEmployer.value === null){
+    		$('#fatherValidate').modal('show');
+    		e.preventDefault();
+    		mEmployer.style.borderColor = 'red'; 
+    		
+    	}else{
+    		mEmployer.style.borderColor = '#e6e6e6';
+    	}
+ 
+    	if(form.healthIssues.value == ''){
+    		$('#healthValidate').modal('show');
+    		e.preventDefault();
+    	
+    	}
+
+
+    	if(form.allergiesConfirm.value == ''){
+    		$('#healthValidate').modal('show');
+    		e.preventDefault();
+    	
+    	}
+
+    	if(form.immunizationConfirm.value == '') {
+    		$('#healthValidate').modal('show');
+    		e.preventDefault();
+    	
+    	}
+
+ 
+    	if(!customControlValidation1.checked){
+    		$('#confirmValidate').modal('show');
+    		e.preventDefault();
+    		customControlValidation1.style.borderColor = 'red'; 
+    		
+    	}else{
+    		customControlValidation1.style.borderColor = '#e6e6e6';
+    	}
+
+    	if(birth_certificate.value === '' || birth_certificate.value === null){
+    		$('#certificateValidate').modal('show');
+    		e.preventDefault();
+    		birth_certificate.style.borderColor = 'red'; 
+    		
+    	}else{
+    		birth_certificate.style.borderColor = '#e6e6e6';
+    	}
+
+
+    });
+
 		  </script>
 
 		  <script type="text/javascript">
   			
 		  	function getAge(date) {
-
+		  	var dobs = document.querySelector(".dob");
 		  	const dob1 = document.querySelector(".dob").value;
 		  	const ageValue = document.getElementById('age');
 		  	var age = "";
@@ -857,39 +1836,91 @@
     		var age = today - day;
     		 age = Math.round(age/ (1000 * 60 * 60 * 24 * 365));
     		 if(age < 1){
-    		 	alert('wrong input');
+    		 	$('#modalDob').modal('show');
+    		dobs.style.borderColor = 'red';
     		 	ageValue.innerHTML = 0;
     		 	document.getElementById('dob').innerHTML = 'Pick Date of Birth';
     		 	return false;
     		 } else{
     		ageValue.innerHTML = age + 'yrs';
+    		dobs.style.borderColor = '#e6e6e6';
+
 
     		 }
 
 			}
 
-		  </script>
-		  <!-- <script src="jquery-1.11.0.min.js" type="text/javascript"></script> -->
-		  <script type="text/javascript">
+		 
 		  	function loadCountry(){
-		  	const country = document.getElementById('country').value;
-		  	const country1 = document.getElementById('country');
+		  	const country = document.getElementById('country');
 		  	const state = document.getElementById('state1');
 		  	const lga = document.getElementById('lga1');
 		  	const others = document.getElementById('others');
+    		const otherCountry = document.getElementById('other');
 
-		  	if(country == 1){
+
+		  	if(country.value == 'Nigeria'){
 		  		others.style.display = 'none';
 		  		state.style.display = 'block';
 		  		lga.style.display = 'block';
+		  		otherCountry.value = '';
 		  	} else{
 		  		others.style.display = 'block';
 		  		state.style.display = 'none';
 		  		lga.style.display = 'none';
 
+		  		var self = $('#ostate');
+     			self.val(self.find('option[selected]').val());
+
+     			var self1 = $('#lga');
+     			self1.val(self1.find('option[selected]').val());
+
+     			if(otherCountry.value == 'Nigeria'){
+    		 	$('#inputValidate').modal('show');
+    		 	otherCountry.style.borderColor = 'red';
+     			}else{
+    		 	otherCountry.style.borderColor = '#e6e6e6';
+
+     			}
+		  		
 		  	}
 
 		  	}
+
+		  	
+		  	function hide1(id){
+		  		 const change = document.getElementById(id);
+		  		change.style.display = 'none';
+		  		change.value = '';
+		  	}
+
+		  	function show1(id){
+		  		 const change = document.getElementById(id);
+		  		change.style.display = 'block';
+		  		
+
+		  	}
+
+		  	function hide_show(id1,id2){
+		  		 const change = document.getElementById(id1);
+		  		change.style.display = 'none';
+		  		const change1 = document.getElementById(id2);
+		  		change1.style.display = 'block';
+		  		
+
+		  	}
+		  	// function acceptNumber(n){
+		  	// 	 var value = document.getElementById(n).value;
+		  		
+		  	// 	if(value != NaN){
+		  	// 		alert('Only numbers accepted');
+		  	// 		// value = ' ';
+		  	// 		return false;
+		  	// 	}
+		  		
+
+		  	// }
+		  	
 		  </script>
 
 		  <!-- ********************** Teststing ***********************************
@@ -960,9 +1991,12 @@ jQuery(window).on('load',function() {
              }
           	
           }
+
+    const allergies = document.getElementsByName('allergies');
+
             console.log(lga);
             console.log(sid);
-            console.log(c);
+            console.log(allergies);
 
 });
         });
